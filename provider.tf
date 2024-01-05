@@ -15,8 +15,8 @@ terraform {
 
 provider "google" {
   credentials = file("C:/Users/myrem/Downloads/warm-bonfire-337209-19bf75d55b1b.json")
-  project     = "warm-bonfire-337209"
-  region      = "asia-south2"
+  project     = var.project_id
+  region      = var.region
 }
 
 provider "random" {}
