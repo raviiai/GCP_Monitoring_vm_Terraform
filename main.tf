@@ -47,9 +47,7 @@ resource "google_compute_instance" "this" {
     }
   }
 
-  
 }
-
 
 ################################################
 ## Google Monitoring Dashboard
@@ -57,74 +55,14 @@ resource "google_compute_instance" "this" {
 
 resource "google_monitoring_dashboard" "dashboard" {
     project = var.project_id
-  dashboard_json = <<EOF
-{
-  "displayName": "My DashBoard VM",
-  "gridLayout": {
-    "columns": "2",
-    "widgets": [
-      {
-        "title": "CPU Utilization",
-        "xyChart": {
-          "dataSets": [{
-            "timeSeriesQuery": {
-              "timeSeriesFilter": {
-                "filter": "metric.type=\"agent.googleapis.com/nginx/connections/accepted_count\"",
-                "aggregation": {
-                  "perSeriesAligner": "ALIGN_RATE"
-                }
-              },
-              "unitOverride": "1"
-            },
-            "plotType": "LINE"
-          }],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "y1Axis",
-            "scale": "LINEAR"
-          }
-        }
-      },
-      {
-        "text": {
-          "content": "Widget 2",
-          "format": "MARKDOWN"
-        }
-      },
-      {
-        "title": "Widget 3",
-        "xyChart": {
-          "dataSets": [{
-            "timeSeriesQuery": {
-              "timeSeriesFilter": {
-                "filter": "metric.type=\"agent.googleapis.com/nginx/connections/accepted_count\"",
-                "aggregation": {
-                  "perSeriesAligner": "ALIGN_RATE"
-                }
-              },
-              "unitOverride": "1"
-            },
-            "plotType": "STACKED_BAR"
-          }],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "y1Axis",
-            "scale": "LINEAR"
-          }
-        }
-      }
-    ]
-  }
-}
-
-EOF
+  dashboard_json = file("C:/Users/myrem/Desktop/terraform/Git/GCP_Terraform/GCP_Terraform/dashboard.json")
 }
 ############################################################
 ## Creating Alert Policy
 ############################################################
 
 resource "google_monitoring_alert_policy" "alert_policy" {
-  display_name = "CPU Utilization > 50%"
+  display_name = "CPU Utilization > 30%"
   
   combiner     = "OR"
   conditions {
@@ -133,7 +71,7 @@ resource "google_monitoring_alert_policy" "alert_policy" {
         comparison = "COMPARISON_GT"
         duration = "60s"
         filter = "resource.type = \"gce_instance\" AND metric.type = \"compute.googleapis.com/instance/cpu/utilization\""
-        threshold_value = "0.5"
+        threshold_value = "0.3"
         trigger {
           count = "1"
         }
