@@ -9,23 +9,6 @@ resource "random_string" "myrand_string" {
   special = false
 }
 
-################################################
-## Firewall
-################################################
-
-# resource "google_compute_firewall" "allow_http" {
-#     source_service_accounts = 
-#   name    = "allow-http-rule"
-#   network = "default"
-#   allow {
-#     ports    = ["80"]
-#     protocol = "tcp"
-#   }
-#   target_tags = ["allow-http"]
-#   priority    = 1000
-
-# }
-
 ###########################################
 ## Google cloud compute instance
 ###########################################
@@ -36,7 +19,6 @@ resource "google_compute_instance" "this" {
   machine_type = "e2-small"
   zone         = var.zone
 
-    tags = ["allow-http"]
   network_interface {
     network = "default"
   }
@@ -46,7 +28,7 @@ resource "google_compute_instance" "this" {
       image = "debian-cloud/debian-11"
     }
   }
-
+    
 }
 
 ################################################
