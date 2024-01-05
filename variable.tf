@@ -1,6 +1,4 @@
-variable "instance_name" {
-
-}
+variable "instance_name" {}
 
 variable "zone" {
   default = "asia-south2-a"
@@ -9,9 +7,6 @@ variable "region" {
   default = "asia-south2"
 }
 
-variable "project_id" {
-}
+variable "project_id" {}
 
-variable "email" {
- 
-}
+variable "email" {}
