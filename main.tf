@@ -29,6 +29,40 @@ resource "google_compute_instance" "this" {
     }
   }
 
+  # metadata = {
+  #   "google-logging-enabled" = "true"
+  #   "ops-agent-instructions" = "install"
+  # }
+
+}
+
+################################################
+## Installing OPs Agent
+################################################
+
+module "cloud-operations_agent-policy" {
+  source  = "terraform-google-modules/cloud-operations/google//modules/agent-policy"
+  version = "0.4.0"
+  # insert the 4 required variables here
+  project_id = var.project_id
+  policy_id  = "ops-agents-policy"
+
+  agent_rules = [
+    {
+      type               = "ops-agent"
+      version            = "current-major"
+      package_state      = "installed"
+      enable_autoupgrade = true
+    },
+  ]
+
+  os_types = [
+    {
+      short_name = "debian"
+      version    = "11"
+    },
+  ]
+
 }
 
 ################################################
