@@ -1,5 +1,5 @@
 {
-    "displayName": "GCE VM Instance Monitoring",
+    "displayName": "My Custom Monitoring Dashboard",
     "gridLayout": {
       "columns": "2",
       "widgets": [
@@ -31,6 +31,7 @@
             }
           }
         },
+
         {
           "title": "GCE VM Instance - Uptime",
           "xyChart": {
@@ -59,6 +60,7 @@
             }
           }
         },
+
         {
           "title": "Disk read operations",
           "xyChart": {
@@ -87,6 +89,7 @@
             }
           }
         },
+
         {
           "title": "Disk write operations",
           "xyChart": {
@@ -115,6 +118,7 @@
             }
           }
         },
+
         {
           "title": "Disk read bytes",
           "xyChart": {
@@ -143,6 +147,7 @@
             }
           }
         },
+
         {
           "title": "Disk write bytes",
           "xyChart": {
@@ -171,6 +176,7 @@
             }
           }
         },
+
         {
           "title": "GCE VM Instance - Received packets",
           "xyChart": {
@@ -199,6 +205,7 @@
             }
           }
         },
+
         {
           "title": "GCE VM Instance - Sent packets count",
           "xyChart": {
@@ -227,6 +234,7 @@
             }
           }
         },
+
         {
           "title": "GCE VM Instance - Received bytes",
           "xyChart": {
@@ -255,6 +263,7 @@
             }
           }
         },
+
         {
           "title": "GCE VM Instance - Sent bytes",
           "xyChart": {
@@ -283,6 +292,7 @@
             }
           }
         }
+
       ]
     }
   }
