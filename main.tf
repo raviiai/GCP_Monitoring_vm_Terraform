@@ -40,30 +40,30 @@ resource "google_compute_instance" "this" {
 ## Installing OPs Agent
 ################################################
 
-module "cloud-operations_agent-policy" {
-  source  = "terraform-google-modules/cloud-operations/google//modules/agent-policy"
-  version = "0.4.0"
-  # insert the 4 required variables here
-  project_id = var.project_id
-  policy_id  = "ops-agents-policy"
+# module "cloud-operations_agent-policy" {
+#   source  = "terraform-google-modules/cloud-operations/google//modules/agent-policy"
+#   version = "0.4.0"
+#   # insert the 4 required variables here
+#   project_id = var.project_id
+#   policy_id  = "ops-agents-policy"
 
-  agent_rules = [
-    {
-      type               = "ops-agent"
-      version            = "current-major"
-      package_state      = "installed"
-      enable_autoupgrade = true
-    },
-  ]
+#   agent_rules = [
+#     {
+#       type               = "ops-agent"
+#       version            = "current-major"
+#       package_state      = "installed"
+#       enable_autoupgrade = true
+#     },
+#   ]
 
-  os_types = [
-    {
-      short_name = "debian"
-      version    = "11"
-    },
-  ]
+#   os_types = [
+#     {
+#       short_name = "debian"
+#       version    = "11"
+#     },
+#   ]
 
-}
+# }
 
 ################################################
 ## Google Monitoring Dashboard
