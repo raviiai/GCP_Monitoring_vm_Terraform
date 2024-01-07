@@ -38,7 +38,7 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ env.EMAIL }}
         TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
-        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
 
     # Generates an execution plan for Terraform
@@ -49,7 +49,7 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ env.EMAIL }}
         TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
-        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
   
     - name: Terraform Apply
@@ -58,7 +58,7 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ env.EMAIL }}
         TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
-        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
 
       ## comment added
