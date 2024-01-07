@@ -32,5 +32,3 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-
-warm-bonfire-337209-19bf75d55b1b.json
