@@ -36,6 +36,9 @@ jobs:
       run: terraform init
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        TF_VARS_email: ${{ env.EMAIL }}
+        TF_VARS_instance_name: ${{ env.INSTANCE_NAME }}
+        TF_VARS_project_id: $${{ env.PROJECT_ID}}
 
 
     # Generates an execution plan for Terraform
@@ -44,21 +47,16 @@ jobs:
       working-directory: ./
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        TF_VARS_email: ${{ env.EMAIL }}
+        TF_VARS_instance_name: ${{ env.INSTANCE_NAME }}
+        TF_VARS_project_id: $${{ env.PROJECT_ID}}
 
-    - name: Terraform Plan 
-      run: terraform plan -input=false -var-file="file.tfvars"
-      env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
   
-        # On push to "main", build or change infrastructure according to Terraform configuration files
-        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-      # - name: Terraform Apply -var-file="file.tfvars"
-        
-      #   run: terraform apply -auto-approve -input=false
-      #   env:
-      #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-      
-
-
-    
+    - name: Terraform Apply
+      run: terraform apply -input=false 
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        TF_VARS_email: ${{ env.EMAIL }}
+        TF_VARS_instance_name: ${{ env.INSTANCE_NAME }}
+        TF_VARS_project_id: $${{ env.PROJECT_ID}}
+      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
