@@ -53,7 +53,7 @@ jobs:
 
   
     - name: Terraform Apply
-      run: terraform apply -input=false 
+      run: terraform apply -input=false -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ env.EMAIL }}
