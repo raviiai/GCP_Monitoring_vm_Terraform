@@ -44,6 +44,7 @@ jobs:
       working-directory: ./
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        TF_VARS_email: "raviiprakash.ai@gmail.com"
 
     - name: Terraform Plan 
       run: terraform plan -input=false -var-file="file.tfvars"
