@@ -59,6 +59,6 @@ jobs:
         TF_VAR_email: ${{ env.EMAIL }}
         TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
       ## comment added
