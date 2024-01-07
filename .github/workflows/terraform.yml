@@ -36,8 +36,8 @@ jobs:
       run: terraform init
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        TF_VAR_email: ${{ env.EMAIL }}
-        TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
+        TF_VAR_email: ${{ vars.EMAIL }}
+        TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
 
@@ -47,8 +47,8 @@ jobs:
       working-directory: ./
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        TF_VAR_email: ${{ env.EMAIL }}
-        TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
+        TF_VAR_email: ${{ vars.EMAIL }}
+        TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
   
@@ -56,8 +56,8 @@ jobs:
       run: terraform apply -input=false -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        TF_VAR_email: ${{ env.EMAIL }}
-        TF_VAR_instance_name: ${{ env.INSTANCE_NAME }}
+        TF_VAR_email: ${{ vars.EMAIL }}
+        TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
