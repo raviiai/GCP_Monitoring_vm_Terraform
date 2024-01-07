@@ -1,5 +1,5 @@
 
-name: 'Terraform'
+name: 'Terraform CI CD'
 
 on:
   push:
@@ -51,6 +51,7 @@ jobs:
     name: 'Terraform-apply'
     runs-on: ubuntu-latest
     environment: production
+    workflow: ['terraform']
   
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -62,16 +63,6 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-      
-    - name: Check Approval Status
-      run: |
-        if [[ $(cat approval.json | jq -r '.approved') == "true" ]]; then
-          echo "Deployment approved. Proceeding with Terraform apply."
-        else
-          echo "Deployment not approved. Exiting workflow."
-          exit 1
-        fi
-        
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
