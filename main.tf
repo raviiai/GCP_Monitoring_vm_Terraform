@@ -119,3 +119,5 @@ resource "google_monitoring_notification_channel" "email" {
     email_address = var.email
   }
 }
+
+## comment added
