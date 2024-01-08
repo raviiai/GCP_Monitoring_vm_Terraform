@@ -104,7 +104,7 @@ jobs:
 
     - name: Request Review
       run: |
-        echo "Please review and approve the changes." | gh pr review ${{ github.event.pull_request.number }} --requester="raviiai"
+        echo "Please review and approve the changes." | gh pr review ${{ github.event.pull_request.number }} --a="raviiai"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
