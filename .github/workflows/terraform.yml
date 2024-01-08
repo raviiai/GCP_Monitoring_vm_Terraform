@@ -11,7 +11,7 @@ permissions:
   contents: read
 jobs:
   terraform-plan:
-    name: 'Terraform Plan'
+    name: 'Development'
     runs-on: ubuntu-latest
     environment: dev
 
@@ -62,7 +62,7 @@ jobs:
 
 
   terraform-apply:
-    name: 'Terraform Plan'
+    name: 'Production'
     runs-on: ubuntu-latest
     environment: prod
     needs: [terraform-plan]
