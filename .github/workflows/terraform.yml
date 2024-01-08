@@ -46,55 +46,12 @@ jobs:
       id: plan
       run: terraform plan -no-color
       continue-on-error: true
-
-    - uses: actions/github-script@v6
-      if: github.event_name == 'pull_request'
       env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ vars.EMAIL }}
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-         
-          
-          <details><summary>Validation Output</summary>
 
-       
-
-          </details>
-
-          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-          <details><summary>Show Plan</summary>
-
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
-
-          </details>
-
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-          })
-          
-
-
-    - name: Terraform Apply
-      run: terraform apply -input=false -auto-approve
-      env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-          TF_VAR_email: ${{ vars.EMAIL }}
-          TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
-          TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
 ############################################
 ## TERRAFORM APPLY FOR THE PRODUCTION ENV
