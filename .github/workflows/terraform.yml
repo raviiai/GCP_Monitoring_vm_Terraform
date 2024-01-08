@@ -1,5 +1,6 @@
-name: 'Terraform CI CD'
 
+
+name: 'Terraform CI CD'
 on:
   push:
     branches: [ "main" ]
@@ -38,34 +39,54 @@ jobs:
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
-    # Generates an execution plan for Terraform
+###############       SAVING ARTIFACTS TO THE GITHUB
+    # - name: Save Artifact
+    #   id: save-artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: ${{ inputs.pr_id }}-tf-plan
+    #     path: ${{ inputs.terraform_directory }}/tfplan
+
+##############################################
+## TERRAFORM PLAN
+##############################################
+
     - name: Terraform Plan
-      run: terraform plan -input=false
       id: plan
+      run: |
+        echo 'plan<<EOF' >> $GITHUB_OUTPUT
+        terraform plan -no-color -out=tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+        
       working-directory: ./
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ vars.EMAIL }}
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-    
-    - name: Post Plan
-      if: always() && github.ref != 'refs/heads/master' && (steps.plan.outcome == 'success' || steps.plan.outcome == 'failure')
-      uses: robburger/terraform-pr-commenter@v1
+
+##############################################
+## COMMENT PLAN
+##############################################
+
+    - name: Comment Plan
+      id: comment-plan
+      uses: peter-evans/create-or-update-comment@v2
       with:
-        commenter_type: plan
-        commenter_input: ${{ format('{0}{1}', steps.plan.outputs.stdout, steps.plan.outputs.stderr) }}
-        commenter_exitcode: ${{ steps.plan.outputs.exitcode }}
+        token: ${{ inputs.github_token }}
+        # issue-number: ${{ inputs.pr_id }}
+        body: |
+          Terraform Plan:
+  
+            ```
+            ${{ steps.plan.outputs.plan }}
+            ```
+  
+          Plan saved to GH artifacts.
 
-    # - name: Terraform Apply
-    #   run: terraform apply -input=false -auto-approve
-    #   env:
-    #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-    #     TF_VAR_email: ${{ vars.EMAIL }}
-    #     TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
-    #     TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
+############################################
+## TERRAFORM APPLY FOR THE PRODUCTION ENV
+############################################
 
   terraform-apply:
     name: 'Production'
