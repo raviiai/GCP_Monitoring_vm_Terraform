@@ -54,10 +54,10 @@ jobs:
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
         
-    - name: Show Terraform Plan
-      if: always()
-      run: |
-        echo "Terraform Plan: ${{ steps.plan.outputs.stdout }}" > terraform-plan-comment.txt
+    # - name: Show Terraform Plan
+    #   if: always()
+    #   run: |
+    #     echo "Terraform Plan: ${{ steps.plan.outputs.stdout }}" > terraform-plan-comment.txt
 
 ############################################
 ## TERRAFORM APPLY FOR THE PRODUCTION ENV
