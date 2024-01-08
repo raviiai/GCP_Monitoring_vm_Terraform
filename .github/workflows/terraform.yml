@@ -104,14 +104,14 @@ jobs:
 
     - name: Request Review
       run: |
-        echo "Please review and approve the changes." | gh pr review ${{ github.event.pull_request.number }} --a="raviiai"
+        echo "Please review and approve the changes." | gh pr review ${{ github.event.pull_request.number }} --approve="raviiai"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       env:
-        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}s
         TF_VAR_email: ${{ vars.EMAIL }}
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
