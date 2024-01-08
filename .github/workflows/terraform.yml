@@ -5,6 +5,8 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+    types:
+      - review_requested
 
 permissions:
   contents: read
@@ -51,20 +53,13 @@ jobs:
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
-    - name: Send approval request
-      uses: peter-evans/create-issue-from-file@v2
-      with:
-          title: 'Deployment Approval Request'
-          assignees: 'raviiai'
-          labels: 'approval'
-          body: |
-            Please approve this deployment by commenting :+1: on this issue.
-    - name: Wait for approval
-      uses: andstor/wait-for-approval@v1
-      with:
-          issue-number: ${{ steps.send_approval_request.outputs.number }}
-          repository-token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Request Review
+      uses: softprops/action-approve@v1
+      with:
+          tokens: ${{ secrets.GITHUB_TOKEN }}   
+
+          
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       env:
