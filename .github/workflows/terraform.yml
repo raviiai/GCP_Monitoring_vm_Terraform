@@ -103,10 +103,10 @@ jobs:
 
 
     - name: Request Review
-      uses: softprops/action-approve@v1
-      with:
-        tokens: ${{ secrets.GITHUB_TOKEN }}
-        reviewers: "raviiai"  
+      run: |
+        echo "Please review and approve the changes." | gh pr review ${{ github.event.pull_request.number }} --requester="raviiai"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
