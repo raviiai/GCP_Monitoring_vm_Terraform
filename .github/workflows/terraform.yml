@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
   pull_request:
     types:
-      - review_requested
+      - closed
 
 permissions:
   contents: read
@@ -52,57 +52,36 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         TF_VAR_email: ${{ vars.EMAIL }}
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
-        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}      
+        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
+        
+    - name: Show Terraform Plan
+      if: always()
+      run: |
+        echo "Terraform Plan: ${{ steps.plan.outputs.stdout }}" > terraform-plan-comment.txt
 
 ############################################
 ## TERRAFORM APPLY FOR THE PRODUCTION ENV
 ############################################
 
-  terraform-apply:
-    name: 'Production'
+  deploy:
+    needs: terraform-plan
     runs-on: ubuntu-latest
-    environment: prod
-    needs: [terraform-plan]
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
-
     steps:
-    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      uses: actions/checkout@v2
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+    - name: Comment on PR with Terraform Plan
+      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
+      run: |
+        PR_NUMBER=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -X GET "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.sha }}" | jq -r .[0].number)
+        COMMENT_BODY=$(cat terraform-plan-comment.txt)
+        curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{\"body\":\"$COMMENT_BODY\"}" "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+
+    - name: Deploy
+      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
+      run: terraform apply -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        TF_VAR_email: ${{ vars.EMAIL }}
-        TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
+        TF_VAR_email: ${{ secrets.EMAIL }}
+        TF_VAR_instance_name: ${{ secrets.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false
-      working-directory: ./
-      env:
-        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        TF_VAR_email: ${{ vars.EMAIL }}
-        TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
-        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-
-    - name: Terraform Apply
-      run: terraform apply -input=false -auto-approve
-      env:
-        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        TF_VAR_email: ${{ vars.EMAIL }}
-        TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
-        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
