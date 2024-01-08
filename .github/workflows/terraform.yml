@@ -100,6 +100,19 @@ jobs:
         TF_VAR_instance_name: ${{ vars.INSTANCE_NAME }}
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
+    - name: Comment PR with Terraform Plan
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Plan 📖\n\`\`\`${{ steps.terraform-plan.outputs.stdout }}\`\`\``;
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## Terraform Plan in Pull Request\n` + output
+            }
+
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       env:
