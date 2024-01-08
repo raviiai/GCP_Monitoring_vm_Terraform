@@ -10,3 +10,6 @@ variable "region" {
 variable "project_id" {}
 
 variable "email" {}
+
+
+############comment added in variable
