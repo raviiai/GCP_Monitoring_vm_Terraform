@@ -65,8 +65,6 @@ jobs:
           issue-number: ${{ steps.send_approval_request.outputs.number }}
           repository-token: ${{ secrets.GITHUB_TOKEN }}
 
-
-  
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       env:
