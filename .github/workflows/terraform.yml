@@ -102,6 +102,12 @@ jobs:
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
 
+    - name: Request Review
+      uses: softprops/action-approve@v1
+      with:
+        tokens: ${{ secrets.GITHUB_TOKEN }}
+        reviewers: "raviiai"  
+
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       env:
