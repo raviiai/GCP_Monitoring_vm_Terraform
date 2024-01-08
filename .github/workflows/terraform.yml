@@ -46,7 +46,7 @@ jobs:
       id: plan
       run: | 
         terraform plan -no-color -out=tfplan
-        terraform show -json tfplan > terraform-plan.txt
+        terraform show -json tfplan > terraform-plan-comment.txt
       continue-on-error: true
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
