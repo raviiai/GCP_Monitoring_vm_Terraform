@@ -102,9 +102,10 @@ jobs:
         TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
 
 
-    - name: Request Review
+    - name: Request Review and Approve
       run: |
-        echo "Please review and approve the changes." | gh pr review ${{ github.event.pull_request.number }} --approve="raviiai"
+        pr_number=$(gh pr list --limit 1 --json number -q '.[0].number')
+        echo "Please review and approve the changes." | gh pr review $pr_number --approve
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
