@@ -15,8 +15,11 @@ terraform {
 
 provider "google" {
   #credentials = file("/warm-bonfire-337209-19bf75d55b1b.json")
-  project     = var.project_id
-  region      = var.region
+  project = var.project_id
+  region  = var.region
 }
 
 provider "random" {}
+
+
+############## Comment Added
